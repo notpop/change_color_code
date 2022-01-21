@@ -1,1 +1,5 @@
 google_analytics: UA-199385187-3
+sitemap:
+    path: sitemap.xml
+    template: ./sitemap_template.xml
+    rel: false
