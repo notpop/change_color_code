@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="css/bootstrap.css">
+    <script src="js/bootstrap.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.6.0.slim.js"
+    integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY="
+    crossorigin="anonymous"></script>
+    <title>カラーコード変換</title>
+
+    <style>
+      .no-spin::-webkit-inner-spin-button,
+      .no-spin::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+        -moz-appearance: textfield;
+      }
+
+      .result {
+        background-color: rgba(125, 219, 153, 0.49);
+        font-weight: bold;
+        border: none;
+        width: 180px;
+        height: 35px;
+        text-align: center;
+      }
+
+      .result :focus {
+        outline: none;
+      }
+
+      .range {
+        width: 300px;
+      }
+
+      .actionButton {
+        height: 30px;
+        line-height: 10px;
+        text-align: center;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+
+      .divColor {
+        width: 400px;
+        height: 200px;
+        background-color: rgba(125, 219, 153, 0.49);
+        margin: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main class="main" style="margin: 10px 10px">
+        <table style="margin: auto;">
+          <tr>
+            <td>
+              <label for="colorCode">
+                <input type="text" max="7" id="colorCode" placeholder="#FFFFFF">
+              </label>
+            </td>
+            <td>
+
+            </td>
+          </tr>
+
+        </table>
+    </main>
+  </body>
+</html>
