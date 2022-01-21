@@ -2,5 +2,3 @@ google_analytics: UA-199385187-3
 path: sitemap.xml
   template: ./sitemap_template.xml
   rel: false
-  tags: true
-  categories: true
