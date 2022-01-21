@@ -18,6 +18,10 @@
   outline: none;
 }
 
+.RGBA {
+  width: 50px;
+}
+
 .range {
   width: 300px;
 }

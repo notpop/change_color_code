@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <!-- bootstrapと独自styleの読み込み -->
-    <link href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style/style.css">
     <!-- bootstrapとjQueryの読み込み -->
     <script src="js/bootstrap.js"></script>
@@ -22,11 +22,356 @@
               </label>
             </td>
             <td>
+              <button type="button" class="btn btn-outline-primary actionButton" onclick="location.reload();">リセット</button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="result">
+                <input type="text" class="result" id="result">
+              </label>
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-info actionButton" onclick="copyClipboard('#result')">コピー</button>
+            </td>
+          </tr>
+        </table>
 
+        <br>
+        <br>
+
+        <table style="margin: auto;">
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <label for="rgbaInput">
+                <input type="text" class="rgbaInput" id="rgbaInput">
+              </label>
+              <button type="button" class="btn btn-outline-success actionButton" style="margin-bottom: 4px;" onclick="setRGBA()">反映</button>
             </td>
           </tr>
 
+          <tr>
+            <td>Red</td>
+            <td>
+              <input type="number" class="no-spin RGBA" id="red" length="3" min="0" max="255" value="125">
+            </td>
+            <td></td>
+            <td>
+              <input type="range" class="form-control-range range" id="formControlRedRange" min="0" max="255" step="1" value="125">
+            </td>
+          </tr>
+
+          <tr>
+            <td>Green</td>
+            <td>
+              <input type="number" class="no-spin RGBA" id="green" length="3" min="0" max="255" value="125">
+            </td>
+            <td></td>
+            <td>
+              <input type="range" class="form-control-range range" id="formControlGreenRange" min="0" max="255" step="1" value="125">
+            </td>
+          </tr>
+
+          <tr>
+            <td>Blue</td>
+            <td>
+              <input type="number" class="no-spin RGBA" id="blue" length="3" min="0" max="255" value="125">
+            </td>
+            <td></td>
+            <td>
+              <input type="range" class="form-control-range range" id="formControlBlueRange" min="0" max="255" step="1" value="125">
+            </td>
+          </tr>
+
+          <tr>
+            <td>Alpha</td>
+            <td>
+              <input type="number" class="no-spin RGBA" id="alpha" length="3" min="0" max="1" step="0.01" value="1">
+            </td>
+            <td></td>
+            <td>
+              <input type="range" class="form-control-range range" id="formControlAlphaRange" min="0" max="1" step="0.01" value="1">
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-primary actionButton" id="getColorCode" onclick="getColorCode()">変換</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-primary actionButton" onclick="location.reload();">リセット</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <label for="resultColorCode">
+                <input type="text" class="result" id="resultColorCode">
+              </label>
+            </td>
+            <td>
+              <button type="button" class="btn btn-outline-info actionButton" onclick="copyClipboard('#resultColorCode')">コピー</button>
+            </td>
+          </tr>
         </table>
+
+        <br>
+        <br>
+
+        <div id="divColor" class="divColor"></div>
     </main>
   </body>
+
+  <script type="text/javascript">
+    function setRangeSliderByRedGreenBlueAlpha(red, green, blue, alpha) {
+      if (null == red || 0 > red || 255 < red) {
+        return false;
+      }
+
+      if (null == green || 0 > green || 255 < green) {
+        return false;
+      }
+
+      if (null == blue || 0 > blue || 255 < blue) {
+        return false;
+      }
+
+      if (null == alpha || 0 > alpha || 1 < alpha) {
+        return false;
+      }
+
+      const formControlRedRange = $('#formControlRedRange');
+      formControlRedRange.val(red);
+
+      const formControlGreenRange = $('#formControlGreenRange');
+      formControlGreenRange.val(green);
+
+      const formControlBlueRange = $('#formControlBlueRange');
+      formControlBlueRange.val(blue);
+
+      const formControlAlphaRange = $('#formControlAlphaRange');
+      formControlAlphaRange.val(alpha);
+    }
+
+    function setDivColorByColorCode(colorCode) {
+      if (null == colorCode) {
+        return false;
+      }
+
+      const divColor = $('#divColor');
+
+      if (divColor.val().match('#')) {
+        divColor.css('background-color', colorCode);
+      }
+      else {
+        divColor.css('background-color', 'rgba(' + colorCode + ')');
+      }
+
+      setColorCode();
+    }
+
+    function changeCode() {
+      const colorCode = $('#colorCode');
+      let colorCodeValue =colorCode.val();
+      colorCodeValue = colorCodeValue.replace('#', '');
+
+      let red = colorCodeValue.slice(0, 2);
+      red = parseInt(red, 16);
+
+      let green = colorCodeValue.slice(2, 4);
+      green = parseInt(green, 16);
+
+      let blue = colorCodeValue.slice(4, 6);
+      blue = parseInt(blue, 16);
+
+      let alpha = 1;
+
+      const RGBA = red + ', ' + green + ', ' + blue + ', ' + alpha;
+
+      if (RGBA.match('NaN')) {
+        alert('値が不正です。');
+
+        return false;
+      }
+
+      const result = $('#result');
+      result.val(RGBA);
+
+      setDivColorByColorCode(RGBA);
+    }
+
+    function chnageRGBA() {
+      const colorCode = $('#colorCode');
+      let colorCodeValue =colorCode.val();
+      colorCodeValue = colorCodeValue.replace('#', '');
+
+      let red = colorCodeValue.slice(0, 2);
+      red = parseInt(red, 16);
+
+      let green = colorCodeValue.slice(2, 4);
+      green = parseInt(green, 16);
+
+      let blue = colorCodeValue.slice(4, 6);
+      blue = parseInt(blue, 16);
+
+      const formControlAlphaRange = $('#formControlAlphaRange');
+      let alpha = formControlAlphaRange.val();
+
+      const RGBA = red + ', ' + green + ', ' + blue + ', ' + alpha;
+
+      if (RGBA.match('NaN')) {
+        alert('値が不正です。');
+
+        return false;
+      }
+
+      const result = $('#result');
+      result.val(RGBA);
+
+      setDivColorByColorCode(RGBA);
+    }
+
+    function setColorCode() {
+      const result = $('#result');
+      const resultValue = result.val();
+      const resultArray = resultValue.split(',');
+
+      $('#red').val(resultArray[0].trim());
+      $('#green').val(resultArray[1].trim());
+      $('#blue').val(resultArray[2].trim());
+      $('#alpha').val(resultArray[3].trim());
+
+      $('#formControlRedRange').val(resultArray[0].trim());
+      $('#formControlGreenRange').val(resultArray[1].trim());
+      $('#formControlBlueRange').val(resultArray[2].trim());
+      $('#formControlAlphaRange').val(resultArray[3].trim());
+    }
+
+    function setRGBA() {
+      const rgbaInput = $('#rgbaInput');
+      const rgbaValue = rgbaInput.val();
+
+      if ('' == rgbaValue) {
+        alert('値を入力してください。');
+
+        return false;
+      }
+
+      const rgbaArray = rgbaValue.split(',');
+
+      $('#red').val(rgbaArray[0].trim());
+      $('#green').val(rgbaArray[1].trim());
+      $('#blue').val(rgbaArray[2].trim());
+      $('#alpha').val(rgbaArray[3].trim());
+
+      $('#formControlRedRange').val(rgbaArray[0].trim());
+      $('#formControlGreenRange').val(rgbaArray[1].trim());
+      $('#formControlBlueRange').val(rgbaArray[2].trim());
+      $('#formControlAlphaRange').val(rgbaArray[3].trim());
+
+      getColorCode();
+    }
+
+    function getColorCode() {
+      const red = parseInt($('#red').val());
+      if (isNaN(red) || 0 > red || 255 < red) {
+        alert('Redの値が不正です。');
+
+        return false;
+      }
+
+      const green = parseInt($('#green').val());
+      if (isNaN(green) || 0 > green || 255 < green) {
+        alert('Greenの値が不正です。');
+
+        return false;
+      }
+
+      const blue = parseInt($('#blue').val());
+      if (isNaN(blue) || 0 > blue || 255 < blue) {
+        alert('Blueの値が不正です。');
+
+        return false;
+      }
+
+      const alpha = parseFloat($('#alpha').val());
+      if (isNaN(alpha) || 0 > alpha || 1 < alpha) {
+        alert('Alphaの値が不正です。');
+
+        return false;
+      }
+
+      const redHexaDecimal = ('00' + red.toString(16)).slice(-2);
+      const greenHexaDecimal = ('00' + green.toString(16)).slice(-2);
+      const blueHexaDecimal = ('00' + blue.toString(16)).slice(-2);
+
+      const result = $('#resultColorCode');
+      const colorCode = '#' + String(redHexaDecimal) + String(greenHexaDecimal) + String(blueHexaDecimal);
+      result.val(colorCode.toUpperCase());
+
+      setRangeSliderByRedGreenBlueAlpha(red, green, blue, alpha);
+
+      const InputColorCode = $('#colorCode');
+      InputColorCode.val(colorCode.toUpperCase());
+
+      chnageRGBA();
+
+      setDivColorByColorCode(red + ', ' + green + ', ' + blue + ', ' + alpha);
+    }
+
+    function copyClipboard(obj) {
+      const temporary = $(obj);
+      temporary.select();
+      document.execCommand('copy');
+    }
+
+    $(function() {
+      const formControlRedRange = $('#formControlRedRange');
+      const inputRed = $('#red');
+      formControlRedRange.on('input', function() {
+        const formControlRedRangeValue = formControlRedRange.val();
+        inputRed.val(formControlRedRangeValue);
+      });
+
+      formControlRedRange.on('change', function() {
+        getColorCode();
+      });
+
+      const formControlGreenRange = $('#formControlGreenRange');
+      const inputGreen = $('#green');
+      formControlGreenRange.on('input', function() {
+        const formControlGreenRangeValue = formControlGreenRange.val();
+        inputGreen.val(formControlGreenRangeValue);
+      });
+
+      formControlGreenRange.on('change', function() {
+        getColorCode();
+      });
+
+      const formControlBlueRange = $('#formControlBlueRange');
+      const inputBlue = $('#blue');
+      formControlBlueRange.on('input', function() {
+        const formControlBlueRangeValue = formControlBlueRange.val();
+        inputBlue.val(formControlBlueRangeValue);
+      });
+
+      formControlBlueRange.on('change', function() {
+        getColorCode();
+      });
+
+      const formControlAlphaRange = $('#formControlAlphaRange');
+      const inputAlpha = $('#alpha');
+      formControlAlphaRange.on('input', function() {
+        const formControlAlphaRangeValue = formControlAlphaRange.val();
+        inputAlpha.val(formControlAlphaRangeValue);
+      });
+
+      formControlAlphaRange.on('change', function() {
+        getColorCode();
+      });
+    });
+  </script>
 </html>
