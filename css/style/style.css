@@ -1,0 +1,38 @@
+.no-spin::-webkit-inner-spin-button,
+.no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  -moz-appearance: textfield;
+}
+
+.result {
+  background-color: rgba(125, 219, 153, 0.49);
+  font-weight: bold;
+  border: none;
+  width: 180px;
+  height: 35px;
+  text-align: center;
+}
+
+.result :focus {
+  outline: none;
+}
+
+.range {
+  width: 300px;
+}
+
+.actionButton {
+  height: 30px;
+  line-height: 10px;
+  text-align: center;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.divColor {
+  width: 400px;
+  height: 200px;
+  background-color: rgba(125, 219, 153, 0.49);
+  margin: auto;
+}
